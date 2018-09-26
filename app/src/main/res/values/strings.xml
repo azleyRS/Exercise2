@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Exercise2</string>
+    <string name="name">Ruslan Khomyakov</string>
+    <string name="key_info">Key Info here</string>
+    <string name="key_info_2">This is NOT my photo, nevertheless Bill is handsome</string>
+    <string name="key_info_3">I am Unemployee, what can i say more :)</string>
+    <string name="description">Ruslan has been doing his best to study Android since summer 2018. At the moment, he is studying in Android Academy and waiting for job offer.</string>
+    <string name="content_description">photo_here</string>
+    <string name="send_message">SEND MESSAGE</string>
+    <string name="enter_a_message">Enter a message…</string>
+    <string name="no_browser_found">No Browser Found..</string>
+    <string name="disclaimer">© 2018 Ruslan Khomyakov</string>
+    <string name="no_email_app">No email apps found</string>
+</resources>

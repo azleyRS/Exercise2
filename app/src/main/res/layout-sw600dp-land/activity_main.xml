@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="0.3"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bill_up_close"
+        android:scaleType="centerInside"
+        android:contentDescription="@string/content_description" />
+    <LinearLayout
+        android:id="@+id/main_linear_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/padding_start_linear_layout"
+        android:paddingEnd="@dimen/padding_main"
+        android:paddingTop="@dimen/padding_main"
+        android:paddingBottom="@dimen/padding_main">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_view_height"
+            android:textSize="@dimen/text_size"
+            android:text="@string/key_info"
+            android:drawableStart="@drawable/ic_key_info"
+            android:drawablePadding="@dimen/drawable_padding"
+            android:layout_marginBottom="@dimen/padding_main"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/key_info_2"
+            android:textSize="@dimen/text_size"
+            android:drawableStart="@drawable/ic_key_info"
+            android:drawablePadding="@dimen/drawable_padding"
+            android:layout_marginBottom="@dimen/padding_main"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/key_info_3"
+            android:textSize="@dimen/text_size"
+            android:drawableStart="@drawable/ic_key_info"
+            android:drawablePadding="@dimen/drawable_padding"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_red_dark" />
+        <TextView
+            android:layout_marginTop="@dimen/padding_main"
+            android:layout_marginBottom="@dimen/padding_main"
+            android:textSize="@dimen/text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"/>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_red_dark" />
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"
+            android:hint="@string/enter_a_message" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:padding="@dimen/padding_main">
+            <Button
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_message"
+                android:textSize="@dimen/text_size"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/holo_red_dark"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center|bottom"
+            >
+            <ImageView
+                android:id="@+id/fb_image_view"
+                android:layout_width="@dimen/icons_size_large"
+                android:layout_height="@dimen/icons_size_large"
+                android:layout_marginEnd="@dimen/margin_main"
+                android:layout_marginStart="@dimen/margin_main"
+                android:scaleType="centerInside"
+                android:src="@drawable/fb_ico"
+                />
+            <ImageView
+                android:id="@+id/vk_image_view"
+                android:layout_width="@dimen/icons_size_large"
+                android:layout_height="@dimen/icons_size_large"
+                android:layout_marginEnd="@dimen/margin_main"
+                android:layout_marginStart="@dimen/margin_main"
+                android:src="@drawable/vk_logo"/>
+            <ImageView
+                android:id="@+id/instagram_image_view"
+                android:layout_width="@dimen/icons_size_large"
+                android:layout_height="@dimen/icons_size_large"
+                android:layout_marginEnd="@dimen/margin_main"
+                android:layout_marginStart="@dimen/margin_main"
+                android:src="@drawable/instagram_icon"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

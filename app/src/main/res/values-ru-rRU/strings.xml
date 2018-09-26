@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Exercise2</string>
+    <string name="name">Руслан Хомяков</string>
+    <string name="key_info">Ключевая информация 1</string>
+    <string name="key_info_2">Ключевая информация 2</string>
+    <string name="key_info_3">Ключевая информация 3</string>
+    <string name="description">Описание</string>
+    <string name="content_description">Здесь фото</string>
+    <string name="send_message">Отправить сообщение</string>
+    <string name="enter_a_message">Введите сообщение…</string>
+    <string name="no_browser_found">Браузер не найден…</string>
+    <string name="no_email_app">Не найдено email приложения</string>
+</resources>

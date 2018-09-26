@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_start_linear_layout">50dp</dimen>
+    <dimen name="padding_main">16dp</dimen>
+    <dimen name="drawable_padding">8dp</dimen>
+    <dimen name="text_view_height">28dp</dimen>
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="image_view_height">250dp</dimen>
+    <dimen name="margin_main">16dp</dimen>
+    <dimen name="icons_size_large">50dp</dimen>
+    <dimen name="icons_size_small">30dp</dimen>
+</resources>
