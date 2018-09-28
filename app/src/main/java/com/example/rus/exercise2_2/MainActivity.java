@@ -19,9 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private final String instagramUrl = "https://www.instagram.com/";
     private final String email = "azley@mail.ru";
     private final String subject = "Hello, Android Academy MSK!";
-    private ImageView fbImageView, vkImageView, instagramImageView;
     private EditText messageEditText;
-    private Button sendButton;
+
     //develop branch
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         getSupportActionBar().setTitle(R.string.name);
-        fbImageView = findViewById(R.id.fb_image_view);
-        vkImageView = findViewById(R.id.vk_image_view);
-        instagramImageView = findViewById(R.id.instagram_image_view);
+        ImageView fbImageView = findViewById(R.id.fb_image_view);
+        ImageView vkImageView = findViewById(R.id.vk_image_view);
+        ImageView instagramImageView = findViewById(R.id.instagram_image_view);
         messageEditText = findViewById(R.id.edit_text);
-        sendButton = findViewById(R.id.send_button);
+        Button sendButton = findViewById(R.id.send_button);
 
 
         fbImageView.setOnClickListener(new View.OnClickListener() {
