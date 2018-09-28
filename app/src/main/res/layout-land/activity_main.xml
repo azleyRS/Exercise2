@@ -78,20 +78,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size"
                 android:hint="@string/enter_a_message" />
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <Button
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/margin_main"
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:padding="@dimen/padding_main">
-                <Button
-                    android:id="@+id/send_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send_message"
-                    android:textSize="@dimen/text_size"
-                    android:background="@android:color/transparent"
-                    android:textColor="@android:color/holo_red_dark"/>
-            </RelativeLayout>
+                android:text="@string/send_message"
+                android:textSize="@dimen/text_size"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/holo_red_dark"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
