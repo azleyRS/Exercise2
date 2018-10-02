@@ -1,6 +1,5 @@
 package com.example.rus.exercise2_2;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,17 +14,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AboutActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private final String fbUrl = "https://www.facebook.com/";
     private final String vkUrl = "https://vk.com/";
     private final String instagramUrl = "https://www.instagram.com/";
     private final String email = "azley@mail.ru";
     private final String subject = "Hello, Android Academy MSK!";
     private EditText messageEditText;
-
-    public static Intent newIntent(Context context) {
-        return new Intent(context, AboutActivity.class);
-    }
 
     //develop branch
     @Override
@@ -37,7 +32,9 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void init() {
-        getSupportActionBar().setTitle(R.string.name);
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().setTitle(R.string.name);
+        }
         ImageView fbImageView = findViewById(R.id.fb_image_view);
         ImageView vkImageView = findViewById(R.id.vk_image_view);
         ImageView instagramImageView = findViewById(R.id.instagram_image_view);
