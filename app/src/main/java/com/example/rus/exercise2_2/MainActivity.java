@@ -2,7 +2,6 @@ package com.example.rus.exercise2_2;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private final String fbUrl = "https://www.facebook.com/";
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        getSupportActionBar().setTitle(R.string.name);
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().setTitle(R.string.name);
+        }
         ImageView fbImageView = findViewById(R.id.fb_image_view);
         ImageView vkImageView = findViewById(R.id.vk_image_view);
         ImageView instagramImageView = findViewById(R.id.instagram_image_view);
