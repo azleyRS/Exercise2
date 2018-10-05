@@ -1,5 +1,6 @@
 package com.example.rus.exercise2_2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,11 @@ public class AboutActivity extends AppCompatActivity {
     private final String email = "azley@mail.ru";
     private final String subject = "Hello, Android Academy MSK!";
     private EditText messageEditText;
+
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, AboutActivity.class);
+        return intent;
+    }
 
     //develop branch
     @Override
