@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class AboutActivity extends AppCompatActivity {
     private final String fbUrl = "https://www.facebook.com/";
     private final String vkUrl = "https://vk.com/";
     private final String instagramUrl = "https://www.instagram.com/";
