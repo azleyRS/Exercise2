@@ -19,8 +19,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     private NewsItem newsItem;
     private Context context;
 
-    public static MyViewHolder create(ViewGroup parent, Context context){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item,parent,false);
+    public static MyViewHolder create(ViewGroup parent, Context context, int layoutRes){
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutRes,parent,false);
         return new MyViewHolder(view, context);
     }
 

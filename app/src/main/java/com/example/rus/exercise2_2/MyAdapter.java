@@ -23,10 +23,30 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         this.context = context;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        int result;
+        switch (newsItems.get(position).getCategory().getName()){
+            case "Darwin Awards":
+                result = R.layout.recycler_view_item_darvin;
+                break;
+            case "Animals":
+                result = R.layout.recycler_view_item_animal;
+                break;
+            case "Music":
+                result = R.layout.recycler_view_item_music;
+                break;
+            default:
+                result = R.layout.recycler_view_item;
+                break;
+        }
+        return result;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return MyViewHolder.create(parent, context);
+        return MyViewHolder.create(parent, context, viewType);
     }
 
     @Override
