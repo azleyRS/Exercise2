@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Date;
+
 public class NewsDetailsActivity extends AppCompatActivity {
 
     private static final String IMAGE_URL_EXTRA = "imageUrl";
@@ -23,13 +25,14 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private static final String FULL_TEXT_EXTRA = "fullText";
     private static final String CATEGORY_EXTRA = "category";
 
-    public static Intent newIntent(Context context, String imageUrl, String title, String publishDate, String fullText, String category) {
+    //after pr recommendation
+    public static Intent newIntent(Context context, NewsItem newsItem) {
         Intent intent = new Intent(context, NewsDetailsActivity.class);
-        intent.putExtra(IMAGE_URL_EXTRA, imageUrl);
-        intent.putExtra(TITLE_EXTRA, title);
-        intent.putExtra(PUBLISH_DATE_EXTRA, publishDate);
-        intent.putExtra(FULL_TEXT_EXTRA, fullText);
-        intent.putExtra(CATEGORY_EXTRA, category);
+        intent.putExtra(IMAGE_URL_EXTRA, newsItem.getImageUrl());
+        intent.putExtra(TITLE_EXTRA, newsItem.getTitle());
+        intent.putExtra(PUBLISH_DATE_EXTRA, newsItem.getPublishDate().getTime());
+        intent.putExtra(FULL_TEXT_EXTRA, newsItem.getFullText());
+        intent.putExtra(CATEGORY_EXTRA, newsItem.getCategory().getName());
         return intent;
     }
 
@@ -44,9 +47,12 @@ public class NewsDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.news_details_activity_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getIntent().getStringExtra(CATEGORY_EXTRA));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //after pr recommendation
+        if (actionBar != null) {
+            actionBar.setTitle(getIntent().getStringExtra(CATEGORY_EXTRA));
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
 
         ImageView imageView = findViewById(R.id.detailed_image_view);
         TextView titleTextView = findViewById(R.id.detailed_title_text_view);
@@ -55,7 +61,9 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
         Glide.with(this).load(getIntent().getStringExtra(IMAGE_URL_EXTRA)).into(imageView);
         titleTextView.setText(getIntent().getStringExtra(TITLE_EXTRA));
-        publishDateTextView.setText(getIntent().getStringExtra(PUBLISH_DATE_EXTRA));
+        //after pr recommendation
+        long date = getIntent().getLongExtra(PUBLISH_DATE_EXTRA, 0);
+        publishDateTextView.setText(TimesUtil.getTimeAgo(new Date(date)));
         fullTextTextView.setText(getIntent().getStringExtra(FULL_TEXT_EXTRA));
     }
 

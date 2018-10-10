@@ -54,19 +54,21 @@ public class NewsListActivity extends AppCompatActivity {
         //recyclerview setup
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         MyAdapter adapter = new MyAdapter(DataUtils.generateNews(), this);
-        checkConfiguration();
+        //after pr recommendation
+        layoutManager = createLayoutManager();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
 
-    private void checkConfiguration() {
+    //after pr recommendation
+    private RecyclerView.LayoutManager createLayoutManager() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            layoutManager = new LinearLayoutManager(this);
+            return new LinearLayoutManager(this);
         } else {
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
             float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
             int spanCount = (int) (dpWidth / 300);
-            layoutManager = new GridLayoutManager(this, spanCount);
+            return new GridLayoutManager(this, spanCount);
         }
     }
 

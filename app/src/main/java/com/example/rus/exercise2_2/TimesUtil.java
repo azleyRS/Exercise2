@@ -2,12 +2,14 @@ package com.example.rus.exercise2_2;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class TimesUtil {
-        private static final int SECOND_MILLIS = 1000;
-        private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-        private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-        private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+        //after pr recommendation
+        private static final int MINUTE_MILLIS = (int) TimeUnit.MINUTES.toMillis(1);
+        private static final int HOUR_MILLIS = (int) TimeUnit.HOURS.toMillis(1);
+        private static final int DAY_MILLIS = (int) TimeUnit.DAYS.toMillis(1);
+        private static final long TIME_IN_SECONDS = 1000000000000L;
 
         public static String getTimeAgo(Date date) {
 
@@ -16,8 +18,9 @@ public class TimesUtil {
             SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
             String dayTime = formatter.format(date);
 
-            if (time < 1000000000000L) {
-                time *= 1000;
+            //if time was given in seconds multiply by 1000, can i use SECONDS.toMillis?
+            if (time < TIME_IN_SECONDS) {
+                time = TimeUnit.SECONDS.toMillis(time);
             }
 
             long now = System.currentTimeMillis();
