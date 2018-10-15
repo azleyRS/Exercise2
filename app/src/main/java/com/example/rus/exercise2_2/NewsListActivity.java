@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 public class NewsListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
+    private int spanCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +51,29 @@ public class NewsListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.news_list_activity_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.ny_times);
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.ny_times);
+        }
         //recyclerview setup
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         MyAdapter adapter = new MyAdapter(DataUtils.generateNews(), this);
-        checkConfiguration();
+        //after pr recommendation
+        layoutManager = createLayoutManager();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new MyItemDecoration(this, R.dimen.item_space, spanCount));
     }
 
-    private void checkConfiguration() {
+    //after pr recommendation
+    private RecyclerView.LayoutManager createLayoutManager() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            layoutManager = new LinearLayoutManager(this);
+            spanCount = 1;
+            return new LinearLayoutManager(this);
         } else {
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
             float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            int spanCount = (int) (dpWidth / 300);
-            layoutManager = new GridLayoutManager(this, spanCount);
+            spanCount = (int) (dpWidth / 300);
+            return new GridLayoutManager(this, spanCount);
         }
     }
 
