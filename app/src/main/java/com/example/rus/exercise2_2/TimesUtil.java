@@ -9,7 +9,6 @@ public class TimesUtil {
         private static final int MINUTE_MILLIS = (int) TimeUnit.MINUTES.toMillis(1);
         private static final int HOUR_MILLIS = (int) TimeUnit.HOURS.toMillis(1);
         private static final int DAY_MILLIS = (int) TimeUnit.DAYS.toMillis(1);
-        private static final long TIME_IN_SECONDS = 1000000000000L;
 
         public static String getTimeAgo(Date date) {
 
@@ -17,11 +16,6 @@ public class TimesUtil {
 
             SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
             String dayTime = formatter.format(date);
-
-            //if time was given in seconds multiply by 1000, can i use SECONDS.toMillis?
-            if (time < TIME_IN_SECONDS) {
-                time = TimeUnit.SECONDS.toMillis(time);
-            }
 
             long now = System.currentTimeMillis();
             if (time > now || time <= 0) {

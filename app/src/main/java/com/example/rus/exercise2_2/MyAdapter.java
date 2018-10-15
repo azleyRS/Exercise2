@@ -1,14 +1,7 @@
 package com.example.rus.exercise2_2;
 
 import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -25,22 +18,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        int result;
         switch (newsItems.get(position).getCategory().getName()){
             case "Darwin Awards":
-                result = R.layout.recycler_view_item_darvin;
-                break;
+                return R.layout.recycler_view_item_darvin;
             case "Animals":
-                result = R.layout.recycler_view_item_animal;
-                break;
+                return R.layout.recycler_view_item_animal;
             case "Music":
-                result = R.layout.recycler_view_item_music;
-                break;
+                return R.layout.recycler_view_item_music;
             default:
-                result = R.layout.recycler_view_item;
-                break;
+                return R.layout.recycler_view_item;
         }
-        return result;
     }
 
     @NonNull
