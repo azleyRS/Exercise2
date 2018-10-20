@@ -24,6 +24,16 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         return new MyViewHolder(view, context);
     }
 
+    //best practice?
+    public void bind(NewsItem newsItem) {
+        this.newsItem = newsItem;
+        categoryTextView.setText(newsItem.getCategory().getName());
+        previewTextView.setText(newsItem.getPreviewText());
+        publishDateTextView.setText(TimesUtil.getTimeAgo(newsItem.getPublishDate()));
+        titleTextView.setText(newsItem.getTitle());
+        Glide.with(context).load(newsItem.getImageUrl()).into(imageView);
+    }
+
     private MyViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         this.context = context;
@@ -47,13 +57,5 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         context.startActivity(intent);
     }
 
-    //best practice?
-    public void bind(NewsItem newsItem) {
-        this.newsItem = newsItem;
-        categoryTextView.setText(newsItem.getCategory().getName());
-        previewTextView.setText(newsItem.getPreviewText());
-        publishDateTextView.setText(TimesUtil.getTimeAgo(newsItem.getPublishDate()));
-        titleTextView.setText(newsItem.getTitle());
-        Glide.with(context).load(newsItem.getImageUrl()).into(imageView);
-    }
+
 }
