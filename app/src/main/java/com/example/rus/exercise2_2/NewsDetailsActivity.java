@@ -37,6 +37,24 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.news_list_activity_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.about:
+                goToAboutActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
@@ -65,24 +83,6 @@ public class NewsDetailsActivity extends AppCompatActivity {
         long date = getIntent().getLongExtra(PUBLISH_DATE_EXTRA, 0);
         publishDateTextView.setText(TimesUtil.getTimeAgo(new Date(date)));
         fullTextTextView.setText(getIntent().getStringExtra(FULL_TEXT_EXTRA));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.news_list_activity_menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.about:
-                goToAboutActivity();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void goToAboutActivity() {
