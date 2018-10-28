@@ -14,7 +14,7 @@
         <activity
             android:name=".AboutActivity"
             android:theme="@style/AboutTheme"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".NewsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewsDetailsActivity"
+        <activity
+            android:name=".NewsDetailsActivity"
+            android:parentActivityName=".NewsListActivity" />
+        <activity android:name=".ui.NYNewsDetailsActivity"
             android:parentActivityName=".NewsListActivity"></activity>
     </application>
 

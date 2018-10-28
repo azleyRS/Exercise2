@@ -11,6 +11,19 @@
         android:id="@+id/news_list_activity_toolbar"
         layout="@layout/toolbar"/>
 
+
+    <TextView
+        android:id="@+id/section_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Section"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:layout_marginBottom="@dimen/basic_margin"
+        android:layout_marginStart="@dimen/basic_margin"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

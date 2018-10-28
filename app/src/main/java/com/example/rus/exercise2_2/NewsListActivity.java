@@ -1,11 +1,13 @@
 package com.example.rus.exercise2_2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -49,10 +51,11 @@ public class NewsListActivity extends AppCompatActivity {
     private int spanCount;
     private CompositeDisposable compositeDisposables;
     private LinearLayout errorLinearLayout;
-    private TextView errorTextView;
+    private TextView errorTextView, sectionTextView;
     private Button errorButton;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private int checkedItem = 0;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,11 +94,13 @@ public class NewsListActivity extends AppCompatActivity {
         errorButton = findViewById(R.id.error_button);
         recyclerView = findViewById(R.id.recycler_view);
         progressBar = findViewById(R.id.news_list_activity_progress_bar);
+        sectionTextView = findViewById(R.id.section_text_view);
 
+        setupSectionTextView();
 
         setupToolbar();
 
-        loadNews();
+        loadNews(checkedItem);
 
 /*      //anotherThread
         Single<List<NewsItem>> single = Single.fromCallable(() ->{
@@ -140,7 +145,29 @@ public class NewsListActivity extends AppCompatActivity {
                 });*/
     }
 
-    private void loadNews() {
+    private void setupSectionTextView() {
+        Context context = this;
+        sectionTextView.setText(getResources().getStringArray(R.array.news_sections)[checkedItem]);
+        sectionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setSingleChoiceItems(R.array.news_sections, checkedItem, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String section = getResources().getStringArray(R.array.news_sections)[which];
+                        sectionTextView.setText(section);
+                        checkedItem = which;
+                        loadNews(checkedItem);
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    private void loadNews(int checkedItem) {
         progressBar.setVisibility(View.VISIBLE);
 
         compositeDisposables = new CompositeDisposable();
@@ -149,13 +176,14 @@ public class NewsListActivity extends AppCompatActivity {
         NYApi nyApi = NYApi.getInstance();
         NYEndpoint nyEndpoint = nyApi.getNyEndpoint();
 
-        Disposable disposable = nyEndpoint.getNewsRxWithoutKey("home")
+        Disposable disposable = nyEndpoint.getNewsRxWithoutKey(getResources().getStringArray(R.array.news_sections)[checkedItem].toLowerCase())
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(nyResponce -> {
                             List<Result> resultList = nyResponce.results;
                             progressBar.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
+                            sectionTextView.setVisibility(View.VISIBLE);
                             errorLinearLayout.setVisibility(View.GONE);
                             NYAdapter adapter = new NYAdapter(resultList, context);
                             layoutManager = createLayoutManager();
@@ -165,22 +193,19 @@ public class NewsListActivity extends AppCompatActivity {
                         },
                         throwable -> {
                             progressBar.setVisibility(View.GONE);
+                            sectionTextView.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.GONE);
                             errorLinearLayout.setVisibility(View.VISIBLE);
                             errorTextView.setText(throwable.getMessage());
-                            errorButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    errorLinearLayout.setVisibility(View.GONE);
-                                    loadNews();
-                                }
+                            errorButton.setOnClickListener(v -> {
+                                errorLinearLayout.setVisibility(View.GONE);
+                                loadNews(checkedItem);
                             });
                         });
         compositeDisposables.add(disposable);
     }
 
     private void setupToolbar() {
-        //toolbar setup
         Toolbar toolbar = findViewById(R.id.news_list_activity_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
