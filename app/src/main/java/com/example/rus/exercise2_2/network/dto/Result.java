@@ -13,6 +13,8 @@ public class Result {
     public String _abstract;
     @SerializedName("url")
     public String url;
+    @SerializedName("published_date")
+    public String publishedDate;
     @SerializedName("multimedia")
     public List<Multimedium> multimedia = null;
 }
