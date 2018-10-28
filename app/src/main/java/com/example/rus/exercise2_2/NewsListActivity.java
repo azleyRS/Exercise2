@@ -28,7 +28,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rus.exercise2_2.network.NYApi;
 import com.example.rus.exercise2_2.network.NYEndpoint;
@@ -44,6 +48,11 @@ public class NewsListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private int spanCount;
     private CompositeDisposable compositeDisposables;
+    private LinearLayout errorLinearLayout;
+    private TextView errorTextView;
+    private Button errorButton;
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,14 +86,16 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void init() {
+        errorLinearLayout = findViewById(R.id.error_linear_layout);
+        errorTextView = findViewById(R.id.error_text_view);
+        errorButton = findViewById(R.id.error_button);
+        recyclerView = findViewById(R.id.recycler_view);
+        progressBar = findViewById(R.id.news_list_activity_progress_bar);
+
+
         setupToolbar();
-        //recyclerView setup
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
-        ProgressBar progressBar = findViewById(R.id.news_list_activity_progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-
-        compositeDisposables = new CompositeDisposable();
+        loadNews();
 
 /*      //anotherThread
         Single<List<NewsItem>> single = Single.fromCallable(() ->{
@@ -107,9 +118,6 @@ public class NewsListActivity extends AppCompatActivity {
                 } );
         compositeDisposables.add(disposable);*/
 
-        Context context = this;
-        NYApi nyApi = NYApi.getInstance();
-        NYEndpoint nyEndpoint = nyApi.getNyEndpoint();
 /*        nyEndpoint.getNewsWithoutKey("home")
                 .enqueue(new Callback<NYResponce>() {
                     @Override
@@ -130,18 +138,44 @@ public class NewsListActivity extends AppCompatActivity {
 
                     }
                 });*/
+    }
+
+    private void loadNews() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        compositeDisposables = new CompositeDisposable();
+
+        Context context = this;
+        NYApi nyApi = NYApi.getInstance();
+        NYEndpoint nyEndpoint = nyApi.getNyEndpoint();
+
         Disposable disposable = nyEndpoint.getNewsRxWithoutKey("home")
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(nyResponce -> {
-                    List<Result> resultList = nyResponce.results;
-                    progressBar.setVisibility(View.GONE);
-                    NYAdapter adapter = new NYAdapter(resultList, context);
-                    layoutManager = createLayoutManager();
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.addItemDecoration(new MyItemDecoration(context, R.dimen.item_space, spanCount));
-                });
+                            List<Result> resultList = nyResponce.results;
+                            progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            errorLinearLayout.setVisibility(View.GONE);
+                            NYAdapter adapter = new NYAdapter(resultList, context);
+                            layoutManager = createLayoutManager();
+                            recyclerView.setLayoutManager(layoutManager);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.addItemDecoration(new MyItemDecoration(context, R.dimen.item_space, spanCount));
+                        },
+                        throwable -> {
+                            progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.GONE);
+                            errorLinearLayout.setVisibility(View.VISIBLE);
+                            errorTextView.setText(throwable.getMessage());
+                            errorButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    errorLinearLayout.setVisibility(View.GONE);
+                                    loadNews();
+                                }
+                            });
+                        });
         compositeDisposables.add(disposable);
     }
 

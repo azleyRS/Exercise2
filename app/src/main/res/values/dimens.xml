@@ -10,4 +10,5 @@
     <dimen name="icons_size_large">50dp</dimen>
     <dimen name="icons_size_small">30dp</dimen>
     <dimen name="item_space">4dp</dimen>
+    <dimen name="basic_margin">16dp</dimen>
 </resources>
