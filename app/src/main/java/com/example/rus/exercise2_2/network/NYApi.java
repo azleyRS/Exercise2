@@ -5,7 +5,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class NYApi {
-    private static final String URL = "https://api.nytimes.com/svc/topstories/v2";
+    private static final String URL = "https://api.nytimes.com/svc/topstories/v2/";
 
     private static NYApi nyApi;
     private final NYEndpoint nyEndpoint;

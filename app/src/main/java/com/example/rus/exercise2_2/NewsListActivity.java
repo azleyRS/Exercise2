@@ -1,5 +1,6 @@
 package com.example.rus.exercise2_2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Looper;
 import android.util.DisplayMetrics;
@@ -24,6 +28,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import com.example.rus.exercise2_2.network.NYApi;
+import com.example.rus.exercise2_2.network.NYEndpoint;
+import com.example.rus.exercise2_2.network.dto.NYResponce;
+import com.example.rus.exercise2_2.network.dto.Result;
+import com.example.rus.exercise2_2.ui.NYAdapter.NYAdapter;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +72,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        compositeDisposables.clear();
+//        compositeDisposables.clear();
     }
 
     private void init() {
@@ -76,7 +86,7 @@ public class NewsListActivity extends AppCompatActivity {
         //recyclerView setup
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
-        ProgressBar progressBar = findViewById(R.id.news_list_activity_progress_bar);
+/*        ProgressBar progressBar = findViewById(R.id.news_list_activity_progress_bar);
         progressBar.setVisibility(View.VISIBLE);
         //anotherThread
         compositeDisposables = new CompositeDisposable();
@@ -98,7 +108,31 @@ public class NewsListActivity extends AppCompatActivity {
                     recyclerView.setAdapter(adapter);
                     recyclerView.addItemDecoration(new MyItemDecoration(this, R.dimen.item_space, spanCount));
                 } );
-        compositeDisposables.add(disposable);
+        compositeDisposables.add(disposable);*/
+
+        Context context = this;
+        NYApi nyApi = NYApi.getInstance();
+        NYEndpoint nyEndpoint = nyApi.getNyEndpoint();
+        nyEndpoint.getNews("home","75f57a2435704e739abed3c30fc44459")
+                .enqueue(new Callback<NYResponce>() {
+                    @Override
+                    public void onResponse(Call<NYResponce> call, Response<NYResponce> response) {
+                        Log.v("TAG", response.toString());
+                        NYResponce nyResponce = response.body();
+                        List<Result> resultList = nyResponce.results;
+                        NYAdapter adapter = new NYAdapter(resultList, context);
+                        layoutManager = createLayoutManager();
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.addItemDecoration(new MyItemDecoration(context, R.dimen.item_space, spanCount));
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<NYResponce> call, Throwable t) {
+
+                    }
+                });
     }
 
     //after pr recommendation

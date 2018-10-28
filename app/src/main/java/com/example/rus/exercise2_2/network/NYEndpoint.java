@@ -10,7 +10,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface NYEndpoint {
-    @GET("/{section}.json")
+    @GET("{section}.json")
     Call<NYResponce> getNews(@Path("section") String section,
                              @Query("api-key") String apiKey);
 

@@ -6,5 +6,5 @@ import java.util.List;
 
 public class NYResponce {
     @SerializedName("results")
-    public List<Result> results = null;
+    public List<Result> results;
 }
