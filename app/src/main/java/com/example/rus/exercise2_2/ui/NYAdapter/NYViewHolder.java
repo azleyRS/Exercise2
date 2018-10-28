@@ -1,7 +1,6 @@
-package com.example.rus.exercise2_2.ui;
+package com.example.rus.exercise2_2.ui.NYAdapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.rus.exercise2_2.NewsDetailsActivity;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.network.dto.Result;
 
@@ -30,12 +29,18 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
     public void bind(Result resultItem) {
         this.resultItem = resultItem;
         //later, can be null
-        //categoryTextView.setText(resultItem.subsection);
+        categoryTextView.setText(resultItem.subsection);
         previewTextView.setText(resultItem._abstract);
         publishDateTextView.setText(resultItem.publishedDate);
         titleTextView.setText(resultItem.title);
         //later
-        //Glide.with(context).load(newsItem.getImageUrl()).into(imageView);
+        if (!resultItem.multimedia.isEmpty()){
+            Glide.with(context).load(resultItem.multimedia.get(1).url)
+                    .apply(new RequestOptions().error(R.drawable.ic_no_image).placeholder(R.drawable.ic_no_image).fitCenter())
+                    .into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.ic_no_image);
+        }
     }
 
     public NYViewHolder(@NonNull View itemView, Context context) {

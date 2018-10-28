@@ -17,4 +17,10 @@ public interface NYEndpoint {
     @GET("/{section}.json")
     Single<NYResponce> getNewsRx(@Path("section") String section,
                              @Query("api-key") String apiKey);
+
+    @GET("{section}.json")
+    Call<NYResponce> getNewsWithoutKey(@Path("section") String section);
+
+    @GET("{section}.json")
+    Single<NYResponce> getNewsRxWithoutKey(@Path("section") String section);
 }

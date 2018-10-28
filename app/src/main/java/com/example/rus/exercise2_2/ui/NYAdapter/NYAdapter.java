@@ -3,9 +3,7 @@ package com.example.rus.exercise2_2.ui.NYAdapter;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.network.dto.Result;
-import com.example.rus.exercise2_2.ui.NYViewHolder;
 
 import java.util.List;
 

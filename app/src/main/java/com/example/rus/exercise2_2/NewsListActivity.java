@@ -113,7 +113,7 @@ public class NewsListActivity extends AppCompatActivity {
         Context context = this;
         NYApi nyApi = NYApi.getInstance();
         NYEndpoint nyEndpoint = nyApi.getNyEndpoint();
-        nyEndpoint.getNews("home","75f57a2435704e739abed3c30fc44459")
+        nyEndpoint.getNewsWithoutKey("home")
                 .enqueue(new Callback<NYResponce>() {
                     @Override
                     public void onResponse(Call<NYResponce> call, Response<NYResponce> response) {
