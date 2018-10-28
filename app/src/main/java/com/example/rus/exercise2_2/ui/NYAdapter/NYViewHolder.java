@@ -28,8 +28,12 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Result resultItem) {
         this.resultItem = resultItem;
-        //later, can be null
-        categoryTextView.setText(resultItem.subsection);
+        if (resultItem.subsection.isEmpty()){
+            categoryTextView.setVisibility(View.GONE);
+        } else {
+            categoryTextView.setVisibility(View.VISIBLE);
+            categoryTextView.setText(resultItem.subsection);
+        }
         previewTextView.setText(resultItem._abstract);
         publishDateTextView.setText(resultItem.publishedDate);
         titleTextView.setText(resultItem.title);

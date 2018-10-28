@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -72,24 +73,20 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        compositeDisposables.clear();
+        compositeDisposables.clear();
     }
 
     private void init() {
-        //toolbar setup
-        Toolbar toolbar = findViewById(R.id.news_list_activity_toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.ny_times);
-        }
+        setupToolbar();
         //recyclerView setup
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
-/*        ProgressBar progressBar = findViewById(R.id.news_list_activity_progress_bar);
+        ProgressBar progressBar = findViewById(R.id.news_list_activity_progress_bar);
         progressBar.setVisibility(View.VISIBLE);
-        //anotherThread
+
         compositeDisposables = new CompositeDisposable();
+
+/*      //anotherThread
         Single<List<NewsItem>> single = Single.fromCallable(() ->{
             //check if is running in the main thread
             Log.v("TAG", String.valueOf(Thread.currentThread().equals( Looper.getMainLooper().getThread() )));
@@ -113,7 +110,7 @@ public class NewsListActivity extends AppCompatActivity {
         Context context = this;
         NYApi nyApi = NYApi.getInstance();
         NYEndpoint nyEndpoint = nyApi.getNyEndpoint();
-        nyEndpoint.getNewsWithoutKey("home")
+/*        nyEndpoint.getNewsWithoutKey("home")
                 .enqueue(new Callback<NYResponce>() {
                     @Override
                     public void onResponse(Call<NYResponce> call, Response<NYResponce> response) {
@@ -132,7 +129,30 @@ public class NewsListActivity extends AppCompatActivity {
                     public void onFailure(Call<NYResponce> call, Throwable t) {
 
                     }
+                });*/
+        Disposable disposable = nyEndpoint.getNewsRxWithoutKey("home")
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(nyResponce -> {
+                    List<Result> resultList = nyResponce.results;
+                    progressBar.setVisibility(View.GONE);
+                    NYAdapter adapter = new NYAdapter(resultList, context);
+                    layoutManager = createLayoutManager();
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.addItemDecoration(new MyItemDecoration(context, R.dimen.item_space, spanCount));
                 });
+        compositeDisposables.add(disposable);
+    }
+
+    private void setupToolbar() {
+        //toolbar setup
+        Toolbar toolbar = findViewById(R.id.news_list_activity_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.ny_times);
+        }
     }
 
     //after pr recommendation
