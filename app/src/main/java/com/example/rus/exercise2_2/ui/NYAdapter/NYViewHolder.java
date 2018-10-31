@@ -41,7 +41,7 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
         publishDateTextView.setText(resultItem.publishedDate);
         titleTextView.setText(resultItem.title);
         //later
-        if (!resultItem.multimedia.isEmpty()){
+        if (resultItem.multimedia.size()>0){
             Glide.with(context).load(resultItem.multimedia.get(1).url)
                     .apply(new RequestOptions().error(R.drawable.ic_no_image).placeholder(R.drawable.ic_no_image).fitCenter())
                     .into(imageView);

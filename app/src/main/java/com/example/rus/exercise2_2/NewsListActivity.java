@@ -34,7 +34,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.rus.exercise2_2.network.NYApi;
 import com.example.rus.exercise2_2.network.NYEndpoint;
@@ -43,10 +42,8 @@ import com.example.rus.exercise2_2.network.dto.Result;
 import com.example.rus.exercise2_2.ui.NYAdapter.NYAdapter;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class NewsListActivity extends AppCompatActivity {
-    private static final long DELAY = 2;
     private RecyclerView.LayoutManager layoutManager;
     private int spanCount;
     private CompositeDisposable compositeDisposables;
@@ -101,108 +98,62 @@ public class NewsListActivity extends AppCompatActivity {
         setupToolbar();
 
         loadNews(checkedItem);
-
-/*      //anotherThread
-        Single<List<NewsItem>> single = Single.fromCallable(() ->{
-            //check if is running in the main thread
-            Log.v("TAG", String.valueOf(Thread.currentThread().equals( Looper.getMainLooper().getThread() )));
-            System.out.println(Thread.currentThread());
-            return DataUtils.generateNews();
-        });
-        Disposable disposable = single.subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .delay(DELAY, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
-                .subscribe( newsItems -> {
-                    progressBar.setVisibility(View.GONE);
-                    MyAdapter adapter = new MyAdapter(newsItems, this);
-                    //after pr recommendation
-                    layoutManager = createLayoutManager();
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.addItemDecoration(new MyItemDecoration(this, R.dimen.item_space, spanCount));
-                } );
-        compositeDisposables.add(disposable);*/
-
-/*        nyEndpoint.getNewsWithoutKey("home")
-                .enqueue(new Callback<NYResponce>() {
-                    @Override
-                    public void onResponse(Call<NYResponce> call, Response<NYResponce> response) {
-                        Log.v("TAG", response.toString());
-                        NYResponce nyResponce = response.body();
-                        List<Result> resultList = nyResponce.results;
-                        NYAdapter adapter = new NYAdapter(resultList, context);
-                        layoutManager = createLayoutManager();
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.addItemDecoration(new MyItemDecoration(context, R.dimen.item_space, spanCount));
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<NYResponce> call, Throwable t) {
-
-                    }
-                });*/
     }
 
     private void setupSectionTextView() {
         Context context = this;
         sectionTextView.setText(getResources().getStringArray(R.array.news_sections)[checkedItem]);
-        sectionTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setSingleChoiceItems(R.array.news_sections, checkedItem, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String section = getResources().getStringArray(R.array.news_sections)[which];
-                        sectionTextView.setText(section);
-                        checkedItem = which;
-                        loadNews(checkedItem);
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-            }
+        sectionTextView.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setSingleChoiceItems(R.array.news_sections, checkedItem, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String section = getResources().getStringArray(R.array.news_sections)[which];
+                    sectionTextView.setText(section);
+                    checkedItem = which;
+                    loadNews(checkedItem);
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
         });
     }
 
     private void loadNews(int checkedItem) {
         progressBar.setVisibility(View.VISIBLE);
-
         compositeDisposables = new CompositeDisposable();
-
-        Context context = this;
-        NYApi nyApi = NYApi.getInstance();
-        NYEndpoint nyEndpoint = nyApi.getNyEndpoint();
+        NYEndpoint nyEndpoint = NYApi.getInstance().getNyEndpoint();
 
         Disposable disposable = nyEndpoint.getNewsRxWithoutKey(getResources().getStringArray(R.array.news_sections)[checkedItem].toLowerCase())
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(nyResponce -> {
-                            List<Result> resultList = nyResponce.results;
-                            progressBar.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                            sectionTextView.setVisibility(View.VISIBLE);
-                            errorLinearLayout.setVisibility(View.GONE);
-                            NYAdapter adapter = new NYAdapter(resultList, context);
-                            layoutManager = createLayoutManager();
-                            recyclerView.setLayoutManager(layoutManager);
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.addItemDecoration(new MyItemDecoration(context, R.dimen.item_space, spanCount));
-                        },
-                        throwable -> {
-                            progressBar.setVisibility(View.GONE);
-                            sectionTextView.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.GONE);
-                            errorLinearLayout.setVisibility(View.VISIBLE);
-                            errorTextView.setText(throwable.getMessage());
-                            errorButton.setOnClickListener(v -> {
-                                errorLinearLayout.setVisibility(View.GONE);
-                                loadNews(checkedItem);
-                            });
-                        });
+                .subscribe(this::handleResponse, this::handleErrors);
         compositeDisposables.add(disposable);
+    }
+
+    private void handleResponse(NYResponce nyResponce){
+        List<Result> resultList = nyResponce.results;
+        progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        sectionTextView.setVisibility(View.VISIBLE);
+        errorLinearLayout.setVisibility(View.GONE);
+        NYAdapter adapter = new NYAdapter(resultList, this);
+        layoutManager = createLayoutManager();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new MyItemDecoration(this, R.dimen.item_space, spanCount));
+    }
+
+    private void handleErrors(Throwable throwable){
+        progressBar.setVisibility(View.GONE);
+        sectionTextView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        errorLinearLayout.setVisibility(View.VISIBLE);
+        errorTextView.setText(throwable.getMessage());
+        errorButton.setOnClickListener(v -> {
+            errorLinearLayout.setVisibility(View.GONE);
+            loadNews(checkedItem);
+        });
     }
 
     private void setupToolbar() {
