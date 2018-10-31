@@ -105,15 +105,12 @@ public class NewsListActivity extends AppCompatActivity {
         sectionTextView.setText(getResources().getStringArray(R.array.news_sections)[checkedItem]);
         sectionTextView.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setSingleChoiceItems(R.array.news_sections, checkedItem, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String section = getResources().getStringArray(R.array.news_sections)[which];
-                    sectionTextView.setText(section);
-                    checkedItem = which;
-                    loadNews(checkedItem);
-                    dialog.dismiss();
-                }
+            builder.setSingleChoiceItems(R.array.news_sections, checkedItem, (dialog, which) -> {
+                String section = getResources().getStringArray(R.array.news_sections)[which];
+                sectionTextView.setText(section);
+                checkedItem = which;
+                loadNews(checkedItem);
+                dialog.dismiss();
             });
             builder.show();
         });
@@ -125,7 +122,7 @@ public class NewsListActivity extends AppCompatActivity {
         NYEndpoint nyEndpoint = NYApi.getInstance().getNyEndpoint();
 
         Disposable disposable = nyEndpoint.getNewsRxWithoutKey(getResources().getStringArray(R.array.news_sections)[checkedItem].toLowerCase())
-                .subscribeOn(Schedulers.single())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleErrors);
         compositeDisposables.add(disposable);
