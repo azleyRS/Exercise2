@@ -13,4 +13,33 @@
     <string name="no_email_app">No email apps found</string>
     <string name="about">About</string>
     <string name="ny_times">NY Times</string>
+    <string name="repeat">Repeat</string>
+    <string-array name="news_sections">
+        <item>Home</item>
+        <item>Opinion</item>
+        <item>World</item>
+        <item>National</item>
+        <item>Politics</item>
+        <item>Upshot</item>
+        <item>Nyregion</item>
+        <item>Business</item>
+        <item>Technology</item>
+        <item>Science</item>
+        <item>Health</item>
+        <item>Sports</item>
+        <item>Arts</item>
+        <item>Books</item>
+        <item>Movies</item>
+        <item>Theater</item>
+        <item>Sundayreview</item>
+        <item>Fashion</item>
+        <item>Tmagazine</item>
+        <item>Food</item>
+        <item>Travel</item>
+        <item>Magazine</item>
+        <item>Realestate</item>
+        <item>Automobiles</item>
+        <item>Obituaries</item>
+        <item>Insider</item>
+    </string-array>
 </resources>
