@@ -97,6 +97,8 @@ public class NewsListActivity extends AppCompatActivity {
 
         setupToolbar();
 
+        compositeDisposables = new CompositeDisposable();
+
         loadNews(checkedItem);
     }
 
@@ -118,7 +120,6 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void loadNews(int checkedItem) {
         progressBar.setVisibility(View.VISIBLE);
-        compositeDisposables = new CompositeDisposable();
         NYEndpoint nyEndpoint = NYApi.getInstance().getNyEndpoint();
 
         Disposable disposable = nyEndpoint.getNewsRxWithoutKey(getResources().getStringArray(R.array.news_sections)[checkedItem].toLowerCase())
