@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class FromNetToDbConverter {
 
-    public Result fromDatabase(NewsEntity newsEntity) {
+    public static Result fromDatabase(NewsEntity newsEntity) {
         Result result = new Result();
         result.subsection = newsEntity.subsection;
         result.title = newsEntity.title;
@@ -22,7 +22,7 @@ public class FromNetToDbConverter {
         return result;
     }
 
-    public NewsEntity toDatabase(Result result) {
+    public static NewsEntity toDatabase(Result result) {
         NewsEntity newsEntity = new NewsEntity();
         newsEntity.setId(result.title+result.url);
         if (result.subsection.isEmpty()){

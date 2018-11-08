@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import com.example.rus.exercise2_2.network.dto.Result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -12,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NYAdapter extends RecyclerView.Adapter<NYViewHolder> {
 
-    private final List<Result> resultList;
+    private List<Result> resultList;
     private final Context context;
 
-    public NYAdapter(List<Result> resultList, Context context) {
-        this.resultList = resultList;
+    public NYAdapter(Context context) {
+        this.resultList = new ArrayList<>();
         this.context = context;
     }
 
@@ -35,5 +36,10 @@ public class NYAdapter extends RecyclerView.Adapter<NYViewHolder> {
     @Override
     public int getItemCount() {
         return resultList.size();
+    }
+
+    public void update(List<Result> resultList) {
+        this.resultList = resultList;
+        notifyDataSetChanged();
     }
 }

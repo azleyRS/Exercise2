@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -27,6 +29,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.rus.exercise2_2.db.AppDatabase;
+import com.example.rus.exercise2_2.db.NewsEntity;
 import com.example.rus.exercise2_2.ui.AboutActivity.AboutActivity;
 import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.network.NYApi;
@@ -35,8 +39,12 @@ import com.example.rus.exercise2_2.network.dto.NYResponce;
 import com.example.rus.exercise2_2.network.dto.Result;
 import com.example.rus.exercise2_2.ui.IntroActivity.IntroActivity;
 import com.example.rus.exercise2_2.ui.NewsListActivity.NYAdapter.NYAdapter;
+import com.example.rus.exercise2_2.utils.FromNetToDbConverter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class NewsListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
@@ -47,7 +55,10 @@ public class NewsListActivity extends AppCompatActivity {
     private Button errorButton;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private FloatingActionButton loadFAB;
     private int checkedItem = 0;
+
+    NYAdapter adapter;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, NewsListActivity.class);
@@ -92,6 +103,7 @@ public class NewsListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         progressBar = findViewById(R.id.news_list_activity_progress_bar);
         sectionTextView = findViewById(R.id.section_text_view);
+        loadFAB = findViewById(R.id.floatingActionButton);
 
         setupSectionTextView();
 
@@ -99,7 +111,20 @@ public class NewsListActivity extends AppCompatActivity {
 
         compositeDisposables = new CompositeDisposable();
 
-        loadNews(checkedItem);
+        adapter = new NYAdapter( this);
+        recyclerView.setAdapter(adapter);
+        layoutManager = createLayoutManager();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new MyItemDecoration(this, R.dimen.item_space, spanCount));
+        setupFAB();
+
+        //this is for testing
+        load();
+        //loadNews(checkedItem);
+    }
+
+    private void setupFAB() {
+        loadFAB.setOnClickListener(v -> loadNews(checkedItem));
     }
 
     private void setupSectionTextView() {
@@ -135,11 +160,36 @@ public class NewsListActivity extends AppCompatActivity {
         recyclerView.setVisibility(View.VISIBLE);
         sectionTextView.setVisibility(View.VISIBLE);
         errorLinearLayout.setVisibility(View.GONE);
-        NYAdapter adapter = new NYAdapter(resultList, this);
-        layoutManager = createLayoutManager();
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new MyItemDecoration(this, R.dimen.item_space, spanCount));
+        //adapter.update(resultList);
+
+        //save to db
+        Disposable disposable = Completable.fromCallable((Callable<Void>) () -> {
+            AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
+            db.newsDao().deleteAll();
+            for (Result result: resultList){
+                NewsEntity entity = FromNetToDbConverter.toDatabase(result);
+                db.newsDao().insert(entity);
+            }
+            return null;
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::load);
+        compositeDisposables.add(disposable);
+    }
+
+    private void load() {
+        Disposable disposable = AppDatabase.getAppDatabase(getApplicationContext()).newsDao().getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(newsEntities -> {
+                    List<Result> resultList = new ArrayList<>();
+                    for (NewsEntity entity: newsEntities){
+                        resultList.add(FromNetToDbConverter.fromDatabase(entity));
+                    }
+                    adapter.update(resultList);
+                });
+        compositeDisposables.add(disposable);
     }
 
     private void handleErrors(Throwable throwable){
