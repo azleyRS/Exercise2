@@ -15,17 +15,17 @@ public class NewsEntity {
     @NonNull
     private String id;
     @ColumnInfo
-    private String title;
+    public String subsection;
     @ColumnInfo
-    private String imageUrl;
+    public String title;
     @ColumnInfo
-    private Category category;
+    public String _abstract;
     @ColumnInfo
-    private Date publishDate;
+    public String url;
     @ColumnInfo
-    private String previewText;
+    public String publishedDate;
     @ColumnInfo
-    private String fullText;
+    public String multimediaUrl;
 
     @NonNull
     public String getId() {
@@ -36,6 +36,14 @@ public class NewsEntity {
         this.id = id;
     }
 
+    public String getSubsection() {
+        return subsection;
+    }
+
+    public void setSubsection(String subsection) {
+        this.subsection = subsection;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -44,43 +52,35 @@ public class NewsEntity {
         this.title = title;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String get_abstract() {
+        return _abstract;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void set_abstract(String _abstract) {
+        this._abstract = _abstract;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getUrl() {
+        return url;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public Date getPublishDate() {
-        return publishDate;
+    public String getPublishedDate() {
+        return publishedDate;
     }
 
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
+    public void setPublishedDate(String publishedDate) {
+        this.publishedDate = publishedDate;
     }
 
-    public String getPreviewText() {
-        return previewText;
+    public String getMultimediaUrl() {
+        return multimediaUrl;
     }
 
-    public void setPreviewText(String previewText) {
-        this.previewText = previewText;
-    }
-
-    public String getFullText() {
-        return fullText;
-    }
-
-    public void setFullText(String fullText) {
-        this.fullText = fullText;
+    public void setMultimediaUrl(String multimediaUrl) {
+        this.multimediaUrl = multimediaUrl;
     }
 }
