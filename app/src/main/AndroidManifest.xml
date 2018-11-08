@@ -22,8 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewsDetailsActivity.NYNewsDetailsActivity"
-            android:parentActivityName=".ui.NewsListActivity.NewsListActivity"></activity>
+        <activity
+            android:name=".ui.NewsDetailsActivity.NYNewsDetailsActivity"
+            android:parentActivityName=".ui.NewsListActivity.NewsListActivity" />
+        <activity android:name=".ui.IntroActivity.IntroActivity"></activity>
     </application>
 
 </manifest>
