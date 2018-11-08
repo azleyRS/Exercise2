@@ -3,9 +3,11 @@ package com.example.rus.exercise2_2.ui.NewsDetailsActivity;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 import android.content.Context;
@@ -14,14 +16,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.rus.exercise2_2.db.AppDatabase;
+import com.example.rus.exercise2_2.db.NewsEntity;
 import com.example.rus.exercise2_2.ui.AboutActivity.AboutActivity;
 import com.example.rus.exercise2_2.R;
+import com.example.rus.exercise2_2.ui.NewsListActivity.NewsListActivity;
+
+import java.util.concurrent.Callable;
 
 public class NYNewsDetailsActivity extends AppCompatActivity {
 
@@ -32,7 +40,8 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
 
     ImageView imageView;
     TextView titleTextView, publishDateTextView, fullTextTextView;
-
+    Button button;
+    private NewsEntity newsEntity;
 
 
     public static Intent newIntent(Context context, String url, String category, String title) {
@@ -95,14 +104,31 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
         //WebView webView = findViewById(R.id.webview);
         //webView.loadUrl(getIntent().getStringExtra(URL_EXTRA));
 
-
         imageView = findViewById(R.id.detailed_image_view);
         fullTextTextView = findViewById(R.id.detailed_full_text_text_view);
         publishDateTextView = findViewById(R.id.detailed_publish_date_text_view);
         titleTextView = findViewById(R.id.detailed_title_text_view);
+        button = findViewById(R.id.delete_button);
+        button.setOnClickListener(v -> delete());
 
 
         loadFromDb();
+    }
+
+    private void delete() {
+        Disposable disposable = Completable.fromCallable((Callable<Void>) () -> {
+            AppDatabase.getAppDatabase(getApplicationContext()).newsDao().delete(newsEntity);
+            return null;
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::toNewsListActivity);
+        compositeDisposables.add(disposable);
+    }
+
+    private void toNewsListActivity() {
+        Intent intent = NewsListActivity.newIntent(this);
+        startActivity(intent);
+        finish();
     }
 
     private void loadFromDb() {
@@ -111,6 +137,7 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(newsEntities -> {
+                    newsEntity = newsEntities;
                     Glide.with(this).load(newsEntities.multimediaUrl).into(imageView);
                     fullTextTextView.setText(newsEntities._abstract);
                     titleTextView.setText(newsEntities.title);
