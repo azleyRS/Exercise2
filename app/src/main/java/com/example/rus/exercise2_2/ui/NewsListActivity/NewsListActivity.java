@@ -33,6 +33,7 @@ import com.example.rus.exercise2_2.network.NYApi;
 import com.example.rus.exercise2_2.network.NYEndpoint;
 import com.example.rus.exercise2_2.network.dto.NYResponce;
 import com.example.rus.exercise2_2.network.dto.Result;
+import com.example.rus.exercise2_2.ui.IntroActivity.IntroActivity;
 import com.example.rus.exercise2_2.ui.NewsListActivity.NYAdapter.NYAdapter;
 
 import java.util.List;
@@ -47,6 +48,11 @@ public class NewsListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private int checkedItem = 0;
+
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, NewsListActivity.class);
+        return intent;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
