@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui;
+package com.example.rus.exercise2_2.ui.NewsDetailsActivity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,16 +12,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-import com.example.rus.exercise2_2.AboutActivity;
+import com.example.rus.exercise2_2.ui.AboutActivity.AboutActivity;
 import com.example.rus.exercise2_2.R;
 
 public class NYNewsDetailsActivity extends AppCompatActivity {
 
     private static final String URL_EXTRA = "url";
+    private static final String CATEGORY_EXTRA = "category";
 
-    public static Intent newIntent(Context context, String url) {
+    public static Intent newIntent(Context context, String url, String category) {
         Intent intent = new Intent(context, NYNewsDetailsActivity.class);
         intent.putExtra(URL_EXTRA, url);
+        if (!category.isEmpty()){
+            intent.putExtra(CATEGORY_EXTRA, category);
+        }
         return intent;
     }
 
@@ -56,6 +60,9 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //after pr recommendation
         if (actionBar != null) {
+            if (getIntent().hasExtra(CATEGORY_EXTRA)){
+                actionBar.setTitle(getIntent().getStringExtra(CATEGORY_EXTRA));
+            }
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }

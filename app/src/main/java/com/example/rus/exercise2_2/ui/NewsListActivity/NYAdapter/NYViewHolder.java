@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.NYAdapter;
+package com.example.rus.exercise2_2.ui.NewsListActivity.NYAdapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.rus.exercise2_2.NewsDetailsActivity;
 import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.network.dto.Result;
-import com.example.rus.exercise2_2.ui.NYNewsDetailsActivity;
+import com.example.rus.exercise2_2.ui.NewsDetailsActivity.NYNewsDetailsActivity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -69,7 +68,7 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
 
     private void goToNewsDetailsActivity() {
         //later
-        Intent intent = NYNewsDetailsActivity.newIntent(context, resultItem.url);
+        Intent intent = NYNewsDetailsActivity.newIntent(context, resultItem.url, resultItem.subsection);
         context.startActivity(intent);
     }
 }

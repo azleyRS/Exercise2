@@ -1,7 +1,6 @@
-package com.example.rus.exercise2_2;
+package com.example.rus.exercise2_2.ui.NewsListActivity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,19 +12,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Scheduler;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import android.os.Looper;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,11 +27,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.rus.exercise2_2.ui.AboutActivity.AboutActivity;
+import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.network.NYApi;
 import com.example.rus.exercise2_2.network.NYEndpoint;
 import com.example.rus.exercise2_2.network.dto.NYResponce;
 import com.example.rus.exercise2_2.network.dto.Result;
-import com.example.rus.exercise2_2.ui.NYAdapter.NYAdapter;
+import com.example.rus.exercise2_2.ui.NewsListActivity.NYAdapter.NYAdapter;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2;
+package com.example.rus.exercise2_2.model;
 
 public class Category {
     private final int id;

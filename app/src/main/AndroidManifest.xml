@@ -12,21 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AboutActivity"
+            android:name=".ui.AboutActivity.AboutActivity"
             android:theme="@style/AboutTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".NewsListActivity">
+        <activity android:name=".ui.NewsListActivity.NewsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".NewsDetailsActivity"
-            android:parentActivityName=".NewsListActivity" />
-        <activity android:name=".ui.NYNewsDetailsActivity"
-            android:parentActivityName=".NewsListActivity"></activity>
+        <activity android:name=".ui.NewsDetailsActivity.NYNewsDetailsActivity"
+            android:parentActivityName=".ui.NewsListActivity.NewsListActivity"></activity>
     </application>
 
 </manifest>

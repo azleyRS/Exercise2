@@ -1,6 +1,5 @@
 package com.example.rus.exercise2_2.network.dto;
 
-import com.example.rus.exercise2_2.TimesUtil;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

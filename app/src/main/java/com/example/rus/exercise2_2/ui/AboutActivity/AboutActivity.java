@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2;
+package com.example.rus.exercise2_2.ui.AboutActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.rus.exercise2_2.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 

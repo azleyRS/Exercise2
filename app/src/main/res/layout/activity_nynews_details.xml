@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.NYNewsDetailsActivity">
+    tools:context=".ui.NewsDetailsActivity.NYNewsDetailsActivity">
     <include
         android:id="@+id/nynews_details_activity_toolbar"
         layout="@layout/toolbar"/>

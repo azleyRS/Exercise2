@@ -1,10 +1,14 @@
-package com.example.rus.exercise2_2;
+package com.example.rus.exercise2_2.utils;
+
+import com.example.rus.exercise2_2.model.Category;
+import com.example.rus.exercise2_2.model.NewsItem;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+//unused class delete if no longer needed
 public class DataUtils {
 
     public static List<NewsItem> generateNews() {

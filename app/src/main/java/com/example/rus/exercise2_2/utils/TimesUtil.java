@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2;
+package com.example.rus.exercise2_2.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

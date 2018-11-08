@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2;
+package com.example.rus.exercise2_2.ui.NewsListActivity;
 
 import android.content.Context;
 import android.graphics.Rect;
