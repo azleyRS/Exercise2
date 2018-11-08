@@ -17,7 +17,7 @@ public interface NewsDao {
     Observable<List<NewsEntity>> getAll();
 
     @Query("SELECT * FROM NewsEntity WHERE id = :id")
-    Single<NewsEntity> getNewsById(int id);
+    Single<NewsEntity> getNewsById(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(NewsEntity... newsEntities);

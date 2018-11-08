@@ -3,6 +3,10 @@ package com.example.rus.exercise2_2.ui.NewsDetailsActivity;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +15,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.rus.exercise2_2.db.AppDatabase;
 import com.example.rus.exercise2_2.ui.AboutActivity.AboutActivity;
 import com.example.rus.exercise2_2.R;
 
@@ -19,13 +27,21 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
 
     private static final String URL_EXTRA = "url";
     private static final String CATEGORY_EXTRA = "category";
+    private static final String TITLE_EXTRA = "title";
+    private CompositeDisposable compositeDisposables;
 
-    public static Intent newIntent(Context context, String url, String category) {
+    ImageView imageView;
+    TextView titleTextView, publishDateTextView, fullTextTextView;
+
+
+
+    public static Intent newIntent(Context context, String url, String category, String title) {
         Intent intent = new Intent(context, NYNewsDetailsActivity.class);
         intent.putExtra(URL_EXTRA, url);
         if (!category.isEmpty()){
             intent.putExtra(CATEGORY_EXTRA, category);
         }
+        intent.putExtra(TITLE_EXTRA, title);
         return intent;
     }
 
@@ -48,14 +64,20 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        compositeDisposables.clear();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nynews_details);
+        setContentView(R.layout.activity_news_details);
         init();
     }
 
     private void init() {
-        Toolbar toolbar = findViewById(R.id.nynews_details_activity_toolbar);
+        Toolbar toolbar = findViewById(R.id.news_details_activity_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         //after pr recommendation
@@ -67,9 +89,34 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
+        compositeDisposables = new CompositeDisposable();
 
-        WebView webView = findViewById(R.id.webview);
-        webView.loadUrl(getIntent().getStringExtra(URL_EXTRA));
+
+        //WebView webView = findViewById(R.id.webview);
+        //webView.loadUrl(getIntent().getStringExtra(URL_EXTRA));
+
+
+        imageView = findViewById(R.id.detailed_image_view);
+        fullTextTextView = findViewById(R.id.detailed_full_text_text_view);
+        publishDateTextView = findViewById(R.id.detailed_publish_date_text_view);
+        titleTextView = findViewById(R.id.detailed_title_text_view);
+
+
+        loadFromDb();
+    }
+
+    private void loadFromDb() {
+        String id = getIntent().getStringExtra(TITLE_EXTRA) + getIntent().getStringExtra(URL_EXTRA);
+        Disposable disposable = AppDatabase.getAppDatabase(getApplicationContext()).newsDao().getNewsById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(newsEntities -> {
+                    Glide.with(this).load(newsEntities.multimediaUrl).into(imageView);
+                    fullTextTextView.setText(newsEntities._abstract);
+                    titleTextView.setText(newsEntities.title);
+                    publishDateTextView.setText(newsEntities.publishedDate);
+                });
+        compositeDisposables.add(disposable);
     }
 
     private void goToAboutActivity() {

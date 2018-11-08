@@ -68,7 +68,7 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
 
     private void goToNewsDetailsActivity() {
         //later
-        Intent intent = NYNewsDetailsActivity.newIntent(context, resultItem.url, resultItem.subsection);
+        Intent intent = NYNewsDetailsActivity.newIntent(context, resultItem.url, resultItem.subsection, resultItem.title);
         context.startActivity(intent);
     }
 }
