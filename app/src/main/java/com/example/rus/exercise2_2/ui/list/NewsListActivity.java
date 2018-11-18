@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.NewsListActivity;
+package com.example.rus.exercise2_2.ui.list;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -31,14 +30,13 @@ import android.widget.TextView;
 
 import com.example.rus.exercise2_2.db.AppDatabase;
 import com.example.rus.exercise2_2.db.NewsEntity;
-import com.example.rus.exercise2_2.ui.AboutActivity.AboutActivity;
+import com.example.rus.exercise2_2.ui.about.AboutActivity;
 import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.network.NYApi;
 import com.example.rus.exercise2_2.network.NYEndpoint;
 import com.example.rus.exercise2_2.network.dto.NYResponce;
 import com.example.rus.exercise2_2.network.dto.Result;
-import com.example.rus.exercise2_2.ui.IntroActivity.IntroActivity;
-import com.example.rus.exercise2_2.ui.NewsListActivity.NYAdapter.NYAdapter;
+import com.example.rus.exercise2_2.ui.list.adapter.NYAdapter;
 import com.example.rus.exercise2_2.utils.FromNetToDbConverter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.IntroActivity;
+package com.example.rus.exercise2_2.ui.intro;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Completable;
@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.example.rus.exercise2_2.R;
-import com.example.rus.exercise2_2.ui.NewsListActivity.NewsListActivity;
+import com.example.rus.exercise2_2.ui.list.NewsListActivity;
 
 import java.util.concurrent.TimeUnit;
 

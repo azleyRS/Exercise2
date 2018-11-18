@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.NewsDetailsActivity;
+package com.example.rus.exercise2_2.ui.details;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,7 +7,6 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 import android.content.Context;
@@ -16,8 +15,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,9 +22,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.rus.exercise2_2.db.AppDatabase;
 import com.example.rus.exercise2_2.db.NewsEntity;
-import com.example.rus.exercise2_2.ui.AboutActivity.AboutActivity;
+import com.example.rus.exercise2_2.ui.about.AboutActivity;
 import com.example.rus.exercise2_2.R;
-import com.example.rus.exercise2_2.ui.NewsListActivity.NewsListActivity;
+import com.example.rus.exercise2_2.ui.list.NewsListActivity;
 
 import java.util.concurrent.Callable;
 

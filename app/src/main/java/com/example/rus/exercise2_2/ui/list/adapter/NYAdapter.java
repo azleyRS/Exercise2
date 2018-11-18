@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.NewsListActivity.NYAdapter;
+package com.example.rus.exercise2_2.ui.list.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;

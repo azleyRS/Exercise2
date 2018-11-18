@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.AboutActivity;
+package com.example.rus.exercise2_2.ui.about;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.NewsListActivity.NYAdapter;
+package com.example.rus.exercise2_2.ui.list.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.network.dto.Result;
-import com.example.rus.exercise2_2.ui.NewsDetailsActivity.NYNewsDetailsActivity;
+import com.example.rus.exercise2_2.ui.details.NYNewsDetailsActivity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

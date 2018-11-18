@@ -11,4 +11,6 @@
     <dimen name="icons_size_small">30dp</dimen>
     <dimen name="item_space">4dp</dimen>
     <dimen name="basic_margin">16dp</dimen>
+    <dimen name="intro_bottom_margin">60dp</dimen>
+    <dimen name="intro_text_size">28sp</dimen>
 </resources>
