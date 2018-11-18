@@ -18,16 +18,13 @@ import java.util.concurrent.TimeUnit;
 public class IntroActivity extends AppCompatActivity {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private String NEED_TO_SHOW = "needToShow";
-    private SharedPreferences preferences;
+    private final static String NEED_TO_SHOW = "needToShow";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean isNeedToShow = needToShowIntro();
-        preferences.edit().putBoolean(NEED_TO_SHOW, !isNeedToShow).apply();
 
-        if (isNeedToShow) {
+        if (needToShowIntro()) {
             setContentView(R.layout.activity_intro);
             Disposable disposable = Completable.complete()
                     .delay(3, TimeUnit.SECONDS)
@@ -39,11 +36,13 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private boolean needToShowIntro() {
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (!preferences.contains(NEED_TO_SHOW)){
             preferences.edit().putBoolean(NEED_TO_SHOW, true).apply();
         }
-        return preferences.getBoolean(NEED_TO_SHOW, true);
+        boolean isNeedToShowIntro = preferences.getBoolean(NEED_TO_SHOW, true);
+        preferences.edit().putBoolean(NEED_TO_SHOW, !isNeedToShowIntro).apply();
+        return isNeedToShowIntro;
     }
 
     private void startSecondActivity() {

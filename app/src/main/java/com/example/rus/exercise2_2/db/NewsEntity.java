@@ -1,9 +1,5 @@
 package com.example.rus.exercise2_2.db;
 
-import com.example.rus.exercise2_2.model.Category;
-
-import java.util.Date;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -18,8 +14,8 @@ public class NewsEntity {
     public String subsection;
     @ColumnInfo
     public String title;
-    @ColumnInfo
-    public String _abstract;
+    @ColumnInfo(name = "previewText")
+    public String previewText;
     @ColumnInfo
     public String url;
     @ColumnInfo
@@ -52,12 +48,12 @@ public class NewsEntity {
         this.title = title;
     }
 
-    public String get_abstract() {
-        return _abstract;
+    public String getPreviewText() {
+        return previewText;
     }
 
-    public void set_abstract(String _abstract) {
-        this._abstract = _abstract;
+    public void setPreviewText(String previewText) {
+        this.previewText = previewText;
     }
 
     public String getUrl() {

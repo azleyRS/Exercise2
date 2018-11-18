@@ -136,7 +136,7 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
                 .subscribe(newsEntities -> {
                     newsEntity = newsEntities;
                     Glide.with(this).load(newsEntities.multimediaUrl).into(imageView);
-                    fullTextTextView.setText(newsEntities._abstract);
+                    fullTextTextView.setText(newsEntities.previewText);
                     titleTextView.setText(newsEntities.title);
                     publishDateTextView.setText(newsEntities.publishedDate);
                 });

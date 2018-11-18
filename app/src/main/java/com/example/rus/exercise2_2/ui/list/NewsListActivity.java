@@ -40,7 +40,6 @@ import com.example.rus.exercise2_2.ui.list.adapter.NYAdapter;
 import com.example.rus.exercise2_2.utils.FromNetToDbConverter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -181,11 +180,12 @@ public class NewsListActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(newsEntities -> {
-                    List<Result> resultList = new ArrayList<>();
+                    /*List<Result> resultList = new ArrayList<>();
                     for (NewsEntity entity: newsEntities){
                         resultList.add(FromNetToDbConverter.fromDatabase(entity));
                     }
-                    adapter.update(resultList);
+                    adapter.update(resultList);*/
+                    adapter.updateWithNewsEntities(newsEntities);
                 });
         compositeDisposables.add(disposable);
     }

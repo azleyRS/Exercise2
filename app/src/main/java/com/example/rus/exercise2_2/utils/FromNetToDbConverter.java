@@ -12,7 +12,7 @@ public class FromNetToDbConverter {
         Result result = new Result();
         result.subsection = newsEntity.subsection;
         result.title = newsEntity.title;
-        result._abstract = newsEntity._abstract;
+        result._abstract = newsEntity.previewText;
         result.url = newsEntity.url;
         result.publishedDate = newsEntity.publishedDate;
         Multimedium multimedium = new Multimedium();
@@ -31,7 +31,7 @@ public class FromNetToDbConverter {
             newsEntity.setSubsection(result.subsection);
         }
         newsEntity.setTitle(result.title);
-        newsEntity.set_abstract(result._abstract);
+        newsEntity.setPreviewText(result._abstract);
         newsEntity.setUrl(result.url);
         newsEntity.setPublishedDate(result.publishedDate);
         if (result.multimedia.size()>0) {
