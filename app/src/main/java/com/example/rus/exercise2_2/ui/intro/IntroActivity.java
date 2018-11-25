@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.example.rus.exercise2_2.R;
-import com.example.rus.exercise2_2.ui.list.NewsListActivity;
+import com.example.rus.exercise2_2.ui.list.NewsListFragment;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +46,7 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private void startSecondActivity() {
-        Intent intent = NewsListActivity.newIntent(this);
+        Intent intent = NewsListFragment.newIntent(this);
         startActivity(intent);
         finish();
     }

@@ -24,7 +24,7 @@ import com.example.rus.exercise2_2.db.AppDatabase;
 import com.example.rus.exercise2_2.db.NewsEntity;
 import com.example.rus.exercise2_2.ui.about.AboutActivity;
 import com.example.rus.exercise2_2.R;
-import com.example.rus.exercise2_2.ui.list.NewsListActivity;
+import com.example.rus.exercise2_2.ui.list.NewsListFragment;
 
 import java.util.concurrent.Callable;
 
@@ -123,7 +123,7 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
     }
 
     private void toNewsListActivity() {
-        Intent intent = NewsListActivity.newIntent(this);
+        Intent intent = NewsListFragment.newIntent(this);
         startActivity(intent);
         finish();
     }

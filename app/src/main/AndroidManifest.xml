@@ -15,15 +15,15 @@
             android:name=".ui.about.AboutActivity"
             android:theme="@style/AboutTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".ui.list.NewsListActivity">
-        </activity>
+        <activity android:name=".ui.list.NewsListFragment"></activity>
         <activity
             android:name=".ui.details.NYNewsDetailsActivity"
-            android:parentActivityName=".ui.list.NewsListActivity" />
+            android:parentActivityName=".ui.list.NewsListFragment" />
         <activity android:name=".ui.intro.IntroActivity">
+        </activity>
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
