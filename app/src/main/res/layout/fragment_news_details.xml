@@ -11,7 +11,7 @@
         android:orientation="vertical"
         tools:context=".NewsDetailsActivity">
         <include
-            android:id="@+id/news_details_activity_toolbar"
+            android:id="@+id/news_details_fragment_toolbar"
             layout="@layout/toolbar"/>
         <ImageView
             android:id="@+id/detailed_image_view"

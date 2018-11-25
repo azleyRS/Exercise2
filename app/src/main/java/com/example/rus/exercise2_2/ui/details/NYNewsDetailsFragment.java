@@ -1,8 +1,11 @@
 package com.example.rus.exercise2_2.ui.details;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -12,9 +15,12 @@ import io.reactivex.schedulers.Schedulers;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +34,7 @@ import com.example.rus.exercise2_2.ui.list.NewsListFragment;
 
 import java.util.concurrent.Callable;
 
-public class NYNewsDetailsActivity extends AppCompatActivity {
+public class NYNewsDetailsFragment extends Fragment {
 
     private static final String URL_EXTRA = "url";
     private static final String CATEGORY_EXTRA = "category";
@@ -40,22 +46,16 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
     Button button;
     private NewsEntity newsEntity;
 
-
-    public static Intent newIntent(Context context, String url, String category, String title) {
-        Intent intent = new Intent(context, NYNewsDetailsActivity.class);
-        intent.putExtra(URL_EXTRA, url);
+    public static NYNewsDetailsFragment newInstance(String url, String category, String title){
+        NYNewsDetailsFragment fragment = new NYNewsDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(URL_EXTRA, url);
         if (!category.isEmpty()){
-            intent.putExtra(CATEGORY_EXTRA, category);
+            bundle.putString(CATEGORY_EXTRA, category);
         }
-        intent.putExtra(TITLE_EXTRA, title);
-        return intent;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.news_list_activity_menu,menu);
-        return true;
+        bundle.putString(TITLE_EXTRA, title);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -70,42 +70,53 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         compositeDisposables.clear();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_details);
-        init();
+        setHasOptionsMenu(true);
     }
 
-    private void init() {
-        Toolbar toolbar = findViewById(R.id.news_details_activity_toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_news_details, container, false);
+        init(view);
+        return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.news_list_activity_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void init(View view) {
+        Toolbar toolbar = view.findViewById(R.id.news_details_fragment_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         //after pr recommendation
         if (actionBar != null) {
-            if (getIntent().hasExtra(CATEGORY_EXTRA)){
-                actionBar.setTitle(getIntent().getStringExtra(CATEGORY_EXTRA));
+            if (getArguments().getString(CATEGORY_EXTRA)!=null){
+                actionBar.setTitle(getArguments().getString(CATEGORY_EXTRA));
             }
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
+        toolbar.setNavigationOnClickListener(v -> toNewsListActivity());
+
         compositeDisposables = new CompositeDisposable();
 
-
-        //WebView webView = findViewById(R.id.webview);
-        //webView.loadUrl(getIntent().getStringExtra(URL_EXTRA));
-
-        imageView = findViewById(R.id.detailed_image_view);
-        fullTextTextView = findViewById(R.id.detailed_full_text_text_view);
-        publishDateTextView = findViewById(R.id.detailed_publish_date_text_view);
-        titleTextView = findViewById(R.id.detailed_title_text_view);
-        button = findViewById(R.id.delete_button);
+        imageView = view.findViewById(R.id.detailed_image_view);
+        fullTextTextView = view.findViewById(R.id.detailed_full_text_text_view);
+        publishDateTextView = view.findViewById(R.id.detailed_publish_date_text_view);
+        titleTextView = view.findViewById(R.id.detailed_title_text_view);
+        button = view.findViewById(R.id.delete_button);
         button.setOnClickListener(v -> delete());
 
 
@@ -114,7 +125,7 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
 
     private void delete() {
         Disposable disposable = Completable.fromCallable((Callable<Void>) () -> {
-            AppDatabase.getAppDatabase(getApplicationContext()).newsDao().delete(newsEntity);
+            AppDatabase.getAppDatabase(getActivity().getApplicationContext()).newsDao().delete(newsEntity);
             return null;
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -123,14 +134,15 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
     }
 
     private void toNewsListActivity() {
-        Intent intent = NewsListFragment.newIntent(this);
+        /*Intent intent = NewsListFragment.newIntent(getActivity());
         startActivity(intent);
-        finish();
+        getActivity().finish();*/
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     private void loadFromDb() {
-        String id = getIntent().getStringExtra(TITLE_EXTRA) + getIntent().getStringExtra(URL_EXTRA);
-        Disposable disposable = AppDatabase.getAppDatabase(getApplicationContext()).newsDao().getNewsById(id)
+        String id = getArguments().getString(TITLE_EXTRA) + getArguments().getString(URL_EXTRA);
+        Disposable disposable = AppDatabase.getAppDatabase(getActivity().getApplicationContext()).newsDao().getNewsById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(newsEntities -> {
@@ -144,7 +156,7 @@ public class NYNewsDetailsActivity extends AppCompatActivity {
     }
 
     private void goToAboutActivity() {
-        Intent intent = AboutActivity.newIntent(this);
+        Intent intent = AboutActivity.newIntent(getActivity());
         startActivity(intent);
     }
 }

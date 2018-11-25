@@ -17,7 +17,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ui.list.NewsListFragment"></activity>
         <activity
-            android:name=".ui.details.NYNewsDetailsActivity"
+            android:name=".ui.details.NYNewsDetailsFragment"
             android:parentActivityName=".ui.list.NewsListFragment" />
         <activity android:name=".ui.intro.IntroActivity">
         </activity>

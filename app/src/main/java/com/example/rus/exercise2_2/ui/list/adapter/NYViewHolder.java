@@ -12,8 +12,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.db.NewsEntity;
-import com.example.rus.exercise2_2.network.dto.Result;
-import com.example.rus.exercise2_2.ui.details.NYNewsDetailsActivity;
+import com.example.rus.exercise2_2.ui.details.NYNewsDetailsFragment;
+import com.example.rus.exercise2_2.ui.main.MainActivityFragmentListener;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,14 +62,14 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToNewsDetailsActivity();
+                goToNewsDetailsFragment();
             }
         });
     }
 
-    private void goToNewsDetailsActivity() {
-        //later
-        Intent intent = NYNewsDetailsActivity.newIntent(context, resultItem.url, resultItem.subsection, resultItem.title);
-        context.startActivity(intent);
+    private void goToNewsDetailsFragment() {
+        if (context instanceof MainActivityFragmentListener){
+            ((MainActivityFragmentListener) context).onNewsItemClick(resultItem.url, resultItem.subsection, resultItem.title);
+        }
     }
 }

@@ -7,7 +7,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +23,8 @@ import io.reactivex.schedulers.Schedulers;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +42,7 @@ import com.example.rus.exercise2_2.network.NYEndpoint;
 import com.example.rus.exercise2_2.network.dto.NYResponce;
 import com.example.rus.exercise2_2.network.dto.Result;
 import com.example.rus.exercise2_2.ui.list.adapter.NYAdapter;
+import com.example.rus.exercise2_2.ui.main.MainActivityFragmentListener;
 import com.example.rus.exercise2_2.utils.FromNetToDbConverter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -57,9 +63,9 @@ public class NewsListFragment extends Fragment {
 
     private NYAdapter adapter;
 
-    public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, NewsListFragment.class);
-        return intent;
+    public static NewsListFragment newInstance(){
+        NewsListFragment fragment = new NewsListFragment();
+        return fragment;
     }
 
     @Override
@@ -76,6 +82,7 @@ public class NewsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -101,6 +108,7 @@ public class NewsListFragment extends Fragment {
         sectionTextView = view.findViewById(R.id.section_text_view);
         loadFAB = view.findViewById(R.id.floatingActionButton);
 
+        setupToolbar(view);
         setupSectionTextView();
 
         compositeDisposables = new CompositeDisposable();
@@ -132,6 +140,29 @@ public class NewsListFragment extends Fragment {
             });
             builder.show();
         });
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.news_list_activity_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+/*    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.news_list_activity_menu,menu);
+        return true;
+    }*/
+
+    private void setupToolbar(View view) {
+        Toolbar toolbar = view.findViewById(R.id.news_list_activity_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.ny_times);
+        }
     }
 
     private void loadNews(int checkedItem) {
@@ -174,6 +205,8 @@ public class NewsListFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(newsEntities -> {
                     adapter.updateWithNewsEntities(newsEntities);
+                    if (!newsEntities.isEmpty())
+                    sectionTextView.setVisibility(View.VISIBLE);
                 });
         compositeDisposables.add(disposable);
     }
