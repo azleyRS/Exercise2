@@ -14,6 +14,8 @@
     <string name="about">About</string>
     <string name="ny_times">NY Times</string>
     <string name="repeat">Repeat</string>
+    <string name="welcome">Welcome!</string>
+    <string name="delete">Delete</string>
     <string-array name="news_sections">
         <item>Home</item>
         <item>Opinion</item>

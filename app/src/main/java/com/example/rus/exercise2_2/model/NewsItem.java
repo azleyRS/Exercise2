@@ -1,4 +1,6 @@
-package com.example.rus.exercise2_2;
+package com.example.rus.exercise2_2.model;
+
+import com.example.rus.exercise2_2.model.Category;
 
 import java.util.Date;
 

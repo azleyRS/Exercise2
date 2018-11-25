@@ -1,4 +1,4 @@
-package com.example.rus.exercise2_2.ui.NYAdapter;
+package com.example.rus.exercise2_2.ui.list.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.rus.exercise2_2.NewsDetailsActivity;
 import com.example.rus.exercise2_2.R;
+import com.example.rus.exercise2_2.db.NewsEntity;
 import com.example.rus.exercise2_2.network.dto.Result;
-import com.example.rus.exercise2_2.ui.NYNewsDetailsActivity;
+import com.example.rus.exercise2_2.ui.details.NYNewsDetailsActivity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class NYViewHolder extends RecyclerView.ViewHolder {
     private TextView categoryTextView, previewTextView, publishDateTextView, titleTextView;
     private ImageView imageView;
-    private Result resultItem;
+    private NewsEntity resultItem;
     private Context context;
 
     public static NYViewHolder create(ViewGroup parent, Context context){
@@ -29,7 +29,7 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
         return new NYViewHolder(view, context);
     }
 
-    public void bind(Result resultItem) {
+    public void bind(NewsEntity resultItem) {
         this.resultItem = resultItem;
         if (resultItem.subsection.isEmpty()){
             categoryTextView.setVisibility(View.GONE);
@@ -37,12 +37,12 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
             categoryTextView.setVisibility(View.VISIBLE);
             categoryTextView.setText(resultItem.subsection);
         }
-        previewTextView.setText(resultItem._abstract);
+        previewTextView.setText(resultItem.previewText);
         publishDateTextView.setText(resultItem.publishedDate);
         titleTextView.setText(resultItem.title);
         //later
-        if (resultItem.multimedia.size()>0){
-            Glide.with(context).load(resultItem.multimedia.get(1).url)
+        if (resultItem.multimediaUrl != null){
+            Glide.with(context).load(resultItem.multimediaUrl)
                     .apply(new RequestOptions().error(R.drawable.ic_no_image).placeholder(R.drawable.ic_no_image).fitCenter())
                     .into(imageView);
         } else {
@@ -69,7 +69,7 @@ public class NYViewHolder extends RecyclerView.ViewHolder {
 
     private void goToNewsDetailsActivity() {
         //later
-        Intent intent = NYNewsDetailsActivity.newIntent(context, resultItem.url);
+        Intent intent = NYNewsDetailsActivity.newIntent(context, resultItem.url, resultItem.subsection, resultItem.title);
         context.startActivity(intent);
     }
 }
