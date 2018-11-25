@@ -17,6 +17,8 @@ import com.example.rus.exercise2_2.ui.list.NewsListFragment;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragmentListener {
 
+    private boolean isTwoPanel;
+
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         return intent;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        isTwoPanel = findViewById(R.id.frame_detail) != null;
         if (savedInstanceState == null){
             init();
         }
@@ -35,18 +38,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         NewsListFragment newsListFragment = NewsListFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.frame_list, newsListFragment)
-                .addToBackStack("first")
+                .replace(R.id.frame_list, newsListFragment)
+                .addToBackStack(null)
                 .commit();
     }
 
     @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+            finish();
+            return;
+        }
+    }
+
+
+    @Override
     public void onNewsItemClick(String url, String category, String title) {
         NYNewsDetailsFragment nyNewsDetailsFragment = NYNewsDetailsFragment.newInstance(url, category, title);
+        int frameId = isTwoPanel? R.id.frame_detail : R.id.frame_list;
+        if (getSupportFragmentManager().findFragmentByTag(title)==null)
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frame_list, nyNewsDetailsFragment)
-                .addToBackStack("second")
+                .replace(frameId, nyNewsDetailsFragment, title)
+                .addToBackStack(title)
                 .commit();
     }
 }

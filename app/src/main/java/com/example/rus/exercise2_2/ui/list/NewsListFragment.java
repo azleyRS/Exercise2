@@ -2,7 +2,6 @@ package com.example.rus.exercise2_2.ui.list;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Completable;
@@ -20,8 +18,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,7 +38,6 @@ import com.example.rus.exercise2_2.network.NYEndpoint;
 import com.example.rus.exercise2_2.network.dto.NYResponce;
 import com.example.rus.exercise2_2.network.dto.Result;
 import com.example.rus.exercise2_2.ui.list.adapter.NYAdapter;
-import com.example.rus.exercise2_2.ui.main.MainActivityFragmentListener;
 import com.example.rus.exercise2_2.utils.FromNetToDbConverter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -225,15 +220,8 @@ public class NewsListFragment extends Fragment {
 
     //after pr recommendation
     private RecyclerView.LayoutManager createLayoutManager() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            spanCount = 1;
-            return new LinearLayoutManager(getActivity());
-        } else {
-            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            spanCount = (int) (dpWidth / 300);
-            return new GridLayoutManager(getActivity(), spanCount);
-        }
+        spanCount = 1;
+        return new LinearLayoutManager(getActivity());
     }
 
 

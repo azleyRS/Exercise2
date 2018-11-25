@@ -134,9 +134,6 @@ public class NYNewsDetailsFragment extends Fragment {
     }
 
     private void toNewsListActivity() {
-        /*Intent intent = NewsListFragment.newIntent(getActivity());
-        startActivity(intent);
-        getActivity().finish();*/
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
