@@ -2,14 +2,15 @@ package com.example.rus.exercise2_2.ui.list;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Completable;
@@ -17,12 +18,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -43,7 +44,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private int spanCount;
     private CompositeDisposable compositeDisposables;
@@ -55,18 +56,11 @@ public class NewsListActivity extends AppCompatActivity {
     private FloatingActionButton loadFAB;
     private int checkedItem = 0;
 
-    NYAdapter adapter;
+    private NYAdapter adapter;
 
-    public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, NewsListActivity.class);
-        return intent;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.news_list_activity_menu,menu);
-        return true;
+    public static NewsListFragment newInstance(){
+        NewsListFragment fragment = new NewsListFragment();
+        return fragment;
     }
 
     @Override
@@ -81,43 +75,46 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_list);
-        init();
+        setHasOptionsMenu(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_news_list, container, false);
+        init(view);
+        return view;
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         compositeDisposables.clear();
     }
 
-    private void init() {
-        errorLinearLayout = findViewById(R.id.error_linear_layout);
-        errorTextView = findViewById(R.id.error_text_view);
-        errorButton = findViewById(R.id.error_button);
-        recyclerView = findViewById(R.id.recycler_view);
-        progressBar = findViewById(R.id.news_list_activity_progress_bar);
-        sectionTextView = findViewById(R.id.section_text_view);
-        loadFAB = findViewById(R.id.floatingActionButton);
+    private void init(View view) {
+        errorLinearLayout = view.findViewById(R.id.error_linear_layout);
+        errorTextView = view.findViewById(R.id.error_text_view);
+        errorButton = view.findViewById(R.id.error_button);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        progressBar = view.findViewById(R.id.news_list_activity_progress_bar);
+        sectionTextView = view.findViewById(R.id.section_text_view);
+        loadFAB = view.findViewById(R.id.floatingActionButton);
 
+        setupToolbar(view);
         setupSectionTextView();
-
-        setupToolbar();
 
         compositeDisposables = new CompositeDisposable();
 
-        adapter = new NYAdapter( this);
+        adapter = new NYAdapter( getActivity());
         recyclerView.setAdapter(adapter);
         layoutManager = createLayoutManager();
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new MyItemDecoration(this, R.dimen.item_space, spanCount));
+        recyclerView.addItemDecoration(new MyItemDecoration(getActivity(), R.dimen.item_space, spanCount));
         setupFAB();
-
-        //this is for testing
         load();
-        //loadNews(checkedItem);
     }
 
     private void setupFAB() {
@@ -125,7 +122,7 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void setupSectionTextView() {
-        Context context = this;
+        Context context = getActivity();
         sectionTextView.setText(getResources().getStringArray(R.array.news_sections)[checkedItem]);
         sectionTextView.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -138,6 +135,29 @@ public class NewsListActivity extends AppCompatActivity {
             });
             builder.show();
         });
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.news_list_activity_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+/*    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.news_list_activity_menu,menu);
+        return true;
+    }*/
+
+    private void setupToolbar(View view) {
+        Toolbar toolbar = view.findViewById(R.id.news_list_activity_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.ny_times);
+        }
     }
 
     private void loadNews(int checkedItem) {
@@ -157,11 +177,10 @@ public class NewsListActivity extends AppCompatActivity {
         recyclerView.setVisibility(View.VISIBLE);
         sectionTextView.setVisibility(View.VISIBLE);
         errorLinearLayout.setVisibility(View.GONE);
-        //adapter.update(resultList);
 
         //save to db
         Disposable disposable = Completable.fromCallable((Callable<Void>) () -> {
-            AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
+            AppDatabase db = AppDatabase.getAppDatabase(getActivity().getApplicationContext());
             db.newsDao().deleteAll();
             for (Result result: resultList){
                 NewsEntity entity = FromNetToDbConverter.toDatabase(result);
@@ -176,16 +195,13 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void load() {
-        Disposable disposable = AppDatabase.getAppDatabase(getApplicationContext()).newsDao().getAll()
+        Disposable disposable = AppDatabase.getAppDatabase(getActivity().getApplicationContext()).newsDao().getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(newsEntities -> {
-                    /*List<Result> resultList = new ArrayList<>();
-                    for (NewsEntity entity: newsEntities){
-                        resultList.add(FromNetToDbConverter.fromDatabase(entity));
-                    }
-                    adapter.update(resultList);*/
                     adapter.updateWithNewsEntities(newsEntities);
+                    if (!newsEntities.isEmpty())
+                    sectionTextView.setVisibility(View.VISIBLE);
                 });
         compositeDisposables.add(disposable);
     }
@@ -202,31 +218,15 @@ public class NewsListActivity extends AppCompatActivity {
         });
     }
 
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.news_list_activity_toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.ny_times);
-        }
-    }
-
     //after pr recommendation
     private RecyclerView.LayoutManager createLayoutManager() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            spanCount = 1;
-            return new LinearLayoutManager(this);
-        } else {
-            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            spanCount = (int) (dpWidth / 300);
-            return new GridLayoutManager(this, spanCount);
-        }
+        spanCount = 1;
+        return new LinearLayoutManager(getActivity());
     }
 
 
     private void goToAboutActivity() {
-        Intent intent = AboutActivity.newIntent(this);
+        Intent intent = AboutActivity.newIntent(getActivity());
         startActivity(intent);
     }
 }
