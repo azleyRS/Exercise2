@@ -16,6 +16,7 @@
         android:layout_marginTop="@dimen/basic_margin"
         android:layout_marginBottom="@dimen/intro_bottom_margin"
         android:src="@drawable/intro_picture"
+        android:layout_gravity="center"
         />
 
     <TextView
