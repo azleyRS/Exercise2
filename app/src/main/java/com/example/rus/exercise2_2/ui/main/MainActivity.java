@@ -3,6 +3,7 @@ package com.example.rus.exercise2_2.ui.main;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import com.example.rus.exercise2_2.R;
 import com.example.rus.exercise2_2.ui.details.NYNewsDetailsFragment;
 import com.example.rus.exercise2_2.ui.intro.IntroActivity;
 import com.example.rus.exercise2_2.ui.list.NewsListFragment;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragmentListener {
 
@@ -29,8 +32,23 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         isTwoPanel = findViewById(R.id.frame_detail) != null;
-        if (savedInstanceState == null){
+        if (savedInstanceState==null){
             init();
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount()>1){
+            // maybe getSupportFragmentManager().executePendingTransactions() ?????
+            /*Fragment fragment = getSupportFragmentManager().findFragmentByTag("list");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_list, fragment)
+                    .addToBackStack("list")
+                    .commit();
+            Fragment fragment2 = getSupportFragmentManager().findFragmentByTag("detail");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_detail, fragment2)
+                    .addToBackStack("detail")
+                    .commit();*/
         }
     }
 
@@ -38,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         NewsListFragment newsListFragment = NewsListFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frame_list, newsListFragment)
-                .addToBackStack(null)
+                .replace(R.id.frame_list, newsListFragment, "list")
+                .addToBackStack("list")
                 .commit();
     }
 
@@ -48,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
             finish();
             return;
+        } else {
+            getSupportFragmentManager().popBackStack();
         }
     }
 
@@ -59,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         if (getSupportFragmentManager().findFragmentByTag(title)==null)
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(frameId, nyNewsDetailsFragment, title)
-                .addToBackStack(title)
+                .replace(frameId, nyNewsDetailsFragment, "detail")
+                .addToBackStack("detail")
                 .commit();
     }
 }
